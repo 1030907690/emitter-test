@@ -35,16 +35,18 @@ public class IndexController {
     @RequestMapping("/chat")
     @CrossOrigin
     public SseEmitter chat(String query) {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(180000L);
 
         executorService.execute(() -> {
             try {
                 for (int i = 0; i < replyData.size(); i++) {
                     String value = replyData.get(i);
                     emitter.send(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+//                    emitter.send(SseEmitter.event().data(value));
                     Thread.sleep(1000);
                 }
-
+//                emitter.send(SseEmitter.event().name("end").data("[DONE]"));
+                Thread.sleep(1000);
                 emitter.complete();
             } catch (Exception e) {
                 log.error("其他的请求聊天异常 {}", e);

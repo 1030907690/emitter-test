@@ -30,7 +30,8 @@ public class IndexController {
     private final ExecutorService executorService = Executors.newFixedThreadPool(2000);
 
 
-    private final List<String> replyData = Arrays.asList("我是", "您的AI助手", "有什么可以帮您", "我是", "您的AI助手", "有什么可以帮您");
+//    private final List<String> replyData = Arrays.asList("我是", "您的AI助手", "有什么可以帮您", "我是", "您的AI助手", "有什么可以帮您");
+private final List<String> replyData = Arrays.asList("我是", "您的AI助手");
 
     @RequestMapping("/chat")
     @CrossOrigin
@@ -42,10 +43,9 @@ public class IndexController {
                 for (int i = 0; i < replyData.size(); i++) {
                     String value = replyData.get(i);
                     emitter.send(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-//                    emitter.send(SseEmitter.event().data(value));
                     Thread.sleep(1000);
                 }
-//                emitter.send(SseEmitter.event().name("end").data("[DONE]"));
+                emitter.send(SseEmitter.event().name("end").data("[DONE]"));
                 Thread.sleep(1000);
                 emitter.complete();
             } catch (Exception e) {

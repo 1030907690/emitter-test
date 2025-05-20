@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: fd-test
+server:
+  port: 8080
+
+# 日志配置
+logging:
+  level:
+    com.zzq: debug
+

@@ -30,8 +30,8 @@ public class IndexController {
     private final ExecutorService executorService = Executors.newFixedThreadPool(2000);
 
 
-//    private final List<String> replyData = Arrays.asList("我是", "您的AI助手", "有什么可以帮您", "我是", "您的AI助手", "有什么可以帮您");
-private final List<String> replyData = Arrays.asList("我是", "您的AI助手");
+    private final List<String> replyData = Arrays.asList("我是", "您的AI助手", "有什么可以帮您", "我是", "您的AI助手", "有什么可以帮您");
+//private final List<String> replyData = Arrays.asList("我是", "您的AI助手");
 
     @RequestMapping("/chat")
     @CrossOrigin
@@ -58,14 +58,19 @@ private final List<String> replyData = Arrays.asList("我是", "您的AI助手")
         return emitter;
     }
 
- /*   @RequestMapping(value = "/chat")
+    /**
+     * 返回ResponseBodyEmitter灵活性强，也可以自己构造标准的SSE返回
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/responseBodyEmitter")
     @CrossOrigin
-    public ResponseBodyEmitter chat(HttpServletResponse response) {
+    public ResponseBodyEmitter responseBodyEmitter(HttpServletResponse response) {
         ResponseBodyEmitter emitter = new ResponseBodyEmitter(180000L);
         executorService.execute(() -> {
             try {
                 for (String value : replyData) {
-                    emitter.send("data: " + value + "\n\n");
+                    emitter.send(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
                     Thread.sleep(1000);
                 }
                 emitter.complete();
@@ -75,8 +80,7 @@ private final List<String> replyData = Arrays.asList("我是", "您的AI助手")
                 throw new RuntimeException(e);
             }
         });
-
         return emitter;
-    }*/
+    }
 
 }
